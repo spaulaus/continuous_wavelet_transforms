@@ -2,23 +2,20 @@
 SHELL=/bin/bash
 
 vpath %.cpp src/
-vpath %.h include/
+vpath %.hpp include/
 
 CINCLUDEDIRS = -Iinclude
 
 CXX = g++
 CXXFLAGS += -Wall $(CINCLUDEDIRS)
-LDLIBS += -lsqlite3 -ldl -lpthread
+LDLIBS += -ldl -lpthread -lmotherwavelet -lsignalgen
 c++SrcSuf = cpp
 
 #Define Objects
-SIGNALGENERATORO = SignalGenerator.o
-#MOTHERWAVELETGENERATOR = MotherWaveletGenerator.o
-MAINO = cwt.o
+MAINO = ContinuousWaveletTransform.o
 
 #List Objects
-OBJS = $(MAINO) $(SIGNALGENERATORO) 
-#$(MOTHERWAVELETGENERATOR)
+OBJS = $(MAINO)
 
 PROGRAM = cwt
 
