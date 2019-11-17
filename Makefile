@@ -1,32 +1,49 @@
 #!/bin/make
 SHELL=/bin/bash
 
+#Define the virtual paths
 vpath %.cpp src/
-vpath %.hpp include/
+vpath %.hpp inc/
+vpath %.o obj/
 
-CINCLUDEDIRS = -Iinclude
-
+#Set some of the compile options
 CXX = g++
-CXXFLAGS += -Wall $(CINCLUDEDIRS)
-LDLIBS += -ldl -lpthread -lmotherwavelet -lsignalgen
+CXXFLAGS = -fPIC -g -Wall $(CINCLUDEDIRS)
+LDLIBS = -ldl -lpthread -lSignalGenerator -lGnuplotPipes -lMotherWaveletGenerator
+CINCLUDEDIRS = -Iinc
 c++SrcSuf = cpp
 
-#Define Objects
-MAINO = ContinuousWaveletTransform.o
+#Set the name of the program to be compiled
+PROGRAM = example
+VERSION = $(shell git describe --abbrev=0 --tags)
 
-#List Objects
-OBJS = $(MAINO)
+#Define Objects
+MAINO = main.o
+CWTO  = Cwt.o
 
 PROGRAM = cwt
 
+#Make the object list and prefix the object directory
+OBJS = $(MAINO) $(CWTO)
+OBJDIR = obj
+OBJS_W_DIR = $(addprefix $(OBJDIR)/,$(OBJS))
+
 .SUFFIXES: .$(c++SrcSuf)
 
-.phony: all clean
-all: $(PROGRAM)
+all: $(OBJS_W_DIR) $(PROGRAM)
 
+$(OBJS_W_DIR): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(PROGRAM): $(OBJS_W_DIR)
+	$(CXX) $(CXXFLAGS) $(LDLIBS) $^ -o $@
+
+$(OBJDIR)/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean so
 clean: 
 	@echo "Cleaning..."
-	@rm -f $(OBJS) $(PROGRAM) *~ src/*~ include/*~
-
-$(PROGRAM): $(OBJS) 
-	$(CXX) $(LDLIBS) $^ -o $@
+	@rm -f $(OBJDIR)/* $(PROGRAM) *~ src/*~ include/*~

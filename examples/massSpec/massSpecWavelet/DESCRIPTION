@@ -1,0 +1,13 @@
+Package: MassSpecWavelet
+Type: Package
+Title: Mass spectrum processing by wavelet-based algorithms
+Version: 1.19.0
+Date: 2010-11-09
+Depends: waveslim
+Suggests: xcms, caTools
+Author: Pan Du, Warren Kibbe, Simon Lin
+Maintainer: Pan Du <dupan@northwestern.edu>
+Description: Processing Mass Spectrometry spectrum by using wavelet based algorithm
+License: LGPL (>= 2)
+biocViews:  MassSpectrometry, Proteomics
+Packaged: 2011-04-14 16:44:00 UTC; biocbuild
